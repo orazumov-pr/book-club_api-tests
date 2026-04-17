@@ -62,9 +62,8 @@ public class RegistrationTests {
                 .post("http://bookclub.qa.guru:8000/api/v1/users/register/")
                 .then()
                 .log().all()
-                .statusCode(201)
-                .body("username", is(username))
-                .body("id", notNullValue());
+                .statusCode(400)
+                .body("username[0]", is("A user with that username already exists."));
 
     }
 }
