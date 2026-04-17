@@ -2,6 +2,7 @@ package tests;
 
 import com.github.javafaker.Faker;
 import models.RegistrationBodyLombokModel;
+import models.RegistrationResponseLombokModel;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.*;
@@ -12,8 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegistrationTests {
 
+    String username;
+    String password;
+
     @Test
-    public void successfulRegistrationTest() {
+    public void successfulRegistrationTest_bad_practice() {
 
         Faker faker = new Faker();
         String username = faker.name().firstName();
@@ -76,7 +80,7 @@ public class RegistrationTests {
 
 //        RegistrationBodyLombokModel data = new RegistrationBodyLombokModel(username, password);
 
-        RegistrationBodyLombokModel registrationResponse = given()
+        RegistrationResponseLombokModel registrationResponse = given()
                 .log().all()
                 .contentType(JSON)
                 .body(data)
@@ -86,7 +90,7 @@ public class RegistrationTests {
                 .log().all()
                 .statusCode(201)
                 .extract()
-                .as(RegistrationBodyLombokModel.class);
+                .as(RegistrationResponseLombokModel.class);
 
         assertEquals(username, registrationResponse.getUsername());
     }
