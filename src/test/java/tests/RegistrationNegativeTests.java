@@ -5,6 +5,8 @@ import models.registration.RegistrationBodyLombokModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.baseURI;
 import static io.restassured.http.ContentType.JSON;
 
 import static io.restassured.RestAssured.given;
@@ -13,7 +15,6 @@ import static org.hamcrest.Matchers.*;
 
 public class RegistrationNegativeTests {
 
-    private static final String BASE_URL = "http://bookclub.qa.guru:8000/api/v1/users/register/";
     private Faker faker;
 
     private String validUsername;
@@ -28,7 +29,7 @@ public class RegistrationNegativeTests {
 
     @Test
     @DisplayName("Регистрация с пустым username должна вернуть 400")
-    void registrationWithEmptyUsername_shouldReturn400() {
+    void emptyUsername400Test() {
         RegistrationBodyLombokModel data = new RegistrationBodyLombokModel();
         data.setUsername("");
         data.setPassword(validPassword);
@@ -38,7 +39,7 @@ public class RegistrationNegativeTests {
                 .contentType(JSON)
                 .body(data)
                 .when()
-                .post(BASE_URL)
+                .post(baseURI)
                 .then()
                 .log().all()
                 .statusCode(400)
@@ -47,7 +48,7 @@ public class RegistrationNegativeTests {
 
     @Test
     @DisplayName("Регистрация с пустым password должна вернуть 400")
-    void registrationWithEmptyPassword_shouldReturn400() {
+    void emptyPassword400Test() {
         RegistrationBodyLombokModel data = new RegistrationBodyLombokModel();
         data.setUsername(validUsername);
         data.setPassword("");
@@ -56,9 +57,19 @@ public class RegistrationNegativeTests {
                 .contentType(JSON)
                 .body(data)
                 .when()
-                .post(BASE_URL)
+                .post(baseURI)
                 .then()
                 .statusCode(400);
+    }
+
+    @Test
+    @DisplayName("GET запрос на эндпоинт регистрации возвпащает 405")
+    void getRequestToRegistration_shouldReturn405() {
+        given()
+                .when()
+                .get(baseURI)
+                .then()
+                .statusCode(405);
     }
 
 
