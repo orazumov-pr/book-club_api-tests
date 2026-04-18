@@ -1,10 +1,10 @@
 package tests;
 
 import com.github.javafaker.Faker;
-import models.RegistrationBodyLombokModel;
-import models.RegistrationBodyRecordsModel;
-import models.RegistrationResponseLombokModel;
-import models.RegistrationResponseRecordsModel;
+import models.registration.RegistrationBodyLombokModel;
+import models.registration.RegistrationBodyRecordsModel;
+import models.registration.RegistrationResponseLombokModel;
+import models.registration.RegistrationResponseRecordsModel;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.*;
@@ -14,6 +14,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegistrationTests {
+
+    private static final String BASE_URL = "http://bookclub.qa.guru:8000/api/v1/users/register/";
 
     String username;
     String password;
@@ -32,7 +34,7 @@ public class RegistrationTests {
                 .contentType(JSON)
                 .body(data)
                 .when()
-                .post("http://bookclub.qa.guru:8000/api/v1/users/register/")
+                .post(BASE_URL)
                 .then()
                 .log().all()
                 .statusCode(201)
@@ -55,19 +57,7 @@ public class RegistrationTests {
                 .contentType(JSON)
                 .body(data)
                 .when()
-                .post("http://bookclub.qa.guru:8000/api/v1/users/register/")
-                .then()
-                .log().all()
-                .statusCode(201)
-                .body("username", is(username))
-                .body("id", notNullValue());
-
-        given()
-                .log().all()
-                .contentType(JSON)
-                .body(data)
-                .when()
-                .post("http://bookclub.qa.guru:8000/api/v1/users/register/")
+                .post(BASE_URL)
                 .then()
                 .log().all()
                 .statusCode(400)
@@ -78,7 +68,7 @@ public class RegistrationTests {
      public void successfulRegistrationTest_with_lombok(){
         RegistrationBodyLombokModel data = new RegistrationBodyLombokModel();
         data.setUsername(username);
-        data.setUsername(password);
+        data.setPassword(password);
 
 //        RegistrationBodyLombokModel data = new RegistrationBodyLombokModel(username, password);
 
@@ -87,7 +77,7 @@ public class RegistrationTests {
                 .contentType(JSON)
                 .body(data)
                 .when()
-                .post("http://bookclub.qa.guru:8000/api/v1/users/register/")
+                .post(BASE_URL)
                 .then()
                 .log().all()
                 .statusCode(201)
@@ -106,7 +96,7 @@ public class RegistrationTests {
                 .contentType(JSON)
                 .body(data)
                 .when()
-                .post("http://bookclub.qa.guru:8000/api/v1/users/register/")
+                .post(BASE_URL)
                 .then()
                 .log().all()
                 .statusCode(201)

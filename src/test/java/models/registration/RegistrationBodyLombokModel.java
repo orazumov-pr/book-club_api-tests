@@ -1,4 +1,4 @@
-package models;
+package models.registration;
 
 import lombok.Data;
 
@@ -6,4 +6,8 @@ import lombok.Data;
 public class RegistrationBodyLombokModel {
     String username;
     String password;
+
+    String validUsername;
+    String validPassword;
 }
+
