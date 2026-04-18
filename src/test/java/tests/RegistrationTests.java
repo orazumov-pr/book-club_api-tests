@@ -2,7 +2,9 @@ package tests;
 
 import com.github.javafaker.Faker;
 import models.RegistrationBodyLombokModel;
+import models.RegistrationBodyRecordsModel;
 import models.RegistrationResponseLombokModel;
+import models.RegistrationResponseRecordsModel;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.*;
@@ -95,5 +97,23 @@ public class RegistrationTests {
         assertEquals(username, registrationResponse.getUsername());
     }
 
+    @Test
+    public void successfulRegistrationTest_with_records(){
+        RegistrationBodyRecordsModel data = new RegistrationBodyRecordsModel(username, password);
+
+        RegistrationResponseRecordsModel registrationResponse = given()
+                .log().all()
+                .contentType(JSON)
+                .body(data)
+                .when()
+                .post("http://bookclub.qa.guru:8000/api/v1/users/register/")
+                .then()
+                .log().all()
+                .statusCode(201)
+                .extract()
+                .as(RegistrationResponseRecordsModel.class);
+
+        assertEquals(username, registrationResponse.username());
+    }
 
 }
